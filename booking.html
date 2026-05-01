@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Запис на сервіс | E-SERVICE</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <style>
+        :root {
+            --tesla-red: #E51937;
+            --bg-color: #f8f9fa;
+            --text-color: #333333;
+            --nav-bg: #ffffff;
+            --footer-bg: #ffffff;
+            --border-color: #eeeeee;
+            --card-bg: #ffffff;
+            --text-muted: #6c757d;
+            --input-bg: #ffffff;
+            --input-border: #ced4da;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --text-color: #f8f9fa;
+            --nav-bg: #1a1a1a;
+            --footer-bg: #1a1a1a;
+            --border-color: #333333;
+            --card-bg: #1e1e1e;
+            --text-muted: #aaaaaa;
+            --input-bg: #2a2a2a;
+            --input-border: #444444;
+        }
+
+        body { font-family: -apple-system, sans-serif; background-color: var(--bg-color); color: var(--text-color); transition: background-color 0.3s, color 0.3s; }
+        
+        /* --- СУПЕР НАВБАР (GLASSMORPHISM) --- */
+        .navbar { 
+            background-color: rgba(255, 255, 255, 0.75) !important; 
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 20px 0; 
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        [data-theme="dark"] .navbar { background-color: rgba(18, 18, 18, 0.75) !important; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        .navbar.scrolled { padding: 10px 0; background-color: rgba(255, 255, 255, 0.95) !important; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+        [data-theme="dark"] .navbar.scrolled { background-color: rgba(18, 18, 18, 0.95) !important; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+
+        .nav-link { position: relative; color: var(--text-color) !important; font-size: 0.95rem; margin: 0 12px; font-weight: 600; padding: 8px 0 !important; transition: color 0.3s; }
+        .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: 0; left: 0; background-color: var(--tesla-red); transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); }
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+        .nav-link:hover, .nav-link.active { color: var(--tesla-red) !important; }
+        .brand-text { font-size: 1.4rem; letter-spacing: 1px; color: var(--text-color); text-decoration: none; transition: transform 0.3s;}
+        .brand-text:hover { transform: scale(1.05); }
+
+        .theme-toggle { background: none; border: none; color: var(--text-color); font-size: 1.2rem; cursor: pointer; transition: transform 0.3s;}
+        .theme-toggle:hover { transform: rotate(15deg); color: var(--tesla-red); }
+        .lang-switcher a { text-decoration: none; color: var(--text-muted); font-weight: 600; font-size: 0.85rem; transition: color 0.2s;}
+        .lang-switcher a.active { color: var(--text-color); border-bottom: 1px solid var(--text-color);}
+        .lang-switcher a:hover { color: var(--tesla-red); }
+        .lang-divider { margin: 0 8px; color: var(--border-color); }
+
+        .btn-tesla-glow { 
+            background: linear-gradient(135deg, #E51937, #b3122a); color: white !important; border-radius: 4px; padding: 10px 24px; font-weight: 600; border: none; display: inline-block; text-decoration: none; box-shadow: 0 4px 15px rgba(229, 25, 55, 0.3); transition: all 0.3s ease; 
+        }
+        .btn-tesla-glow:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(229, 25, 55, 0.5); }
+
+        /* Кнопка форми */
+        .btn-tesla { background-color: var(--tesla-red); color: white; border-radius: 3px; padding: 10px 24px; font-weight: 500; border: none; transition: all 0.3s ease; }
+        .btn-tesla:hover { background-color: #c9152f; color: white; transform: scale(1.02); }
+
+        /* Booking Form */
+        /* Збільшено відступ зверху на 120px для fixed-top навбару */
+        .booking-card { background-color: var(--card-bg); border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 40px; margin: 120px auto 60px; max-width: 600px; border: 1px solid var(--border-color); transition: background-color 0.3s, border-color 0.3s;}
+        
+        .form-control, .form-select { background-color: var(--input-bg); border-color: var(--input-border); color: var(--text-color); transition: background-color 0.3s, color 0.3s, border-color 0.3s;}
+        .form-control:focus, .form-select:focus { background-color: var(--input-bg); color: var(--text-color); border-color: var(--tesla-red); box-shadow: 0 0 0 0.25rem rgba(229, 25, 55, 0.25); }
+        .form-label { color: var(--text-color); }
+        select option { background-color: var(--input-bg); color: var(--text-color); }
+
+        /* Footer */
+        .footer-section { background-color: var(--footer-bg); padding: 60px 0 20px; font-size: 0.9rem; margin-top: 50px; border-top: 1px solid var(--border-color);}
+        .footer-title { font-weight: 700; margin-bottom: 20px; color: var(--text-color);}
+        .footer-text { color: var(--text-muted); margin-bottom: 10px; display: flex; align-items: flex-start; }
+        .footer-text i { color: var(--tesla-red); margin-right: 10px; margin-top: 3px; }
+        .social-icon { display: inline-flex; align-items: center; justify-content: center; width: 35px; height: 35px; background-color: var(--tesla-red); border-radius: 50%; margin-right: 10px; color: white; text-decoration: none; transition: transform 0.3s ease; }
+        .social-icon:hover { transform: translateY(-3px); background-color: #c9152f; }
+        .copyright { text-align: center; color: var(--text-muted); margin-top: 50px; font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top" id="mainNav">
+        <div class="container">
+            <a class="brand-text fw-bold" href="index.html">
+                <span>E-</span><span style="color: var(--tesla-red);">SERVICE</span>
+            </a>
+            
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon" style="filter: invert(var(--invert-icon, 0));"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto mt-3 mt-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="index.html#services">Послуги</a></li>
+                    <li class="nav-item"><a class="nav-link" href="pricing_ua.html">Ціни</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html#about">Про нас</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html#location">Контакти</a></li>
+                </ul>
+                
+                <div class="d-flex align-items-center justify-content-center mt-4 mt-lg-0 gap-3">
+                    <button class="theme-toggle" id="theme-btn" title="Змінити тему">
+                        <i class="bi bi-moon-fill" id="theme-icon"></i>
+                    </button>
+                    
+                    <div class="lang-switcher d-flex align-items-center">
+                        <a href="booking.html" class="active">УКР</a>
+                        <span class="lang-divider">|</span>
+                        <a href="booking_en.html">ENG</a>
+                    </div>
+                    
+                    <a href="booking.html" class="btn-tesla-glow ms-2">Записатися</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="booking-card">
+            <h2 class="text-center fw-bold mb-4" style="color: var(--text-color);">Оформлення запису</h2>
+            <p class="text-center mb-4" style="color: var(--text-muted);">Заповніть форму нижче, і наш менеджер зв'яжеться з вами найближчим часом для підтвердження часу.</p>
+            
+            <form id="bookingForm" novalidate>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-medium">Ваше ім'я</label>
+                        <input type="text" class="form-control" id="nameInput" placeholder="Петрик Пяточкін" required>
+                        <div class="invalid-feedback">Будь ласка, введіть ваше ім'я.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-medium">Номер телефону</label>
+                        <input type="tel" class="form-control" id="phoneInput" placeholder="+380 (__) ___-__-__" required>
+                        <div class="invalid-feedback">Введіть коректний номер у форматі +380 (XX) XXX-XX-XX.</div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label fw-medium">Модель Tesla</label>
+                        <select class="form-select" id="modelInput" required>
+                            <option value="" selected disabled>Оберіть модель</option>
+                            <option value="Model S">Model S</option>
+                            <option value="Model 3">Model 3</option>
+                            <option value="Model X">Model X</option>
+                            <option value="Model Y">Model Y</option>
+                        </select>
+                        <div class="invalid-feedback">Будь ласка, оберіть модель авто.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-medium">Бажана дата візиту</label>
+                        <input type="date" class="form-control" id="dateInput" required>
+                        <div class="invalid-feedback">Оберіть дату.</div>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label fw-medium">Тип послуги</label>
+                        <select class="form-select" id="serviceInput" required>
+                            <option value="" selected disabled>Оберіть тип послуги</option>
+                            <option value="Діагностика">Повна діагностика</option>
+                            <option value="Батарея">Обслуговування батареї та двигуна</option>
+                            <option value="Кузов">Кузовний ремонт та фарбування</option>
+                            <option value="Інше">Інше / Консультація</option>
+                        </select>
+                        <div class="invalid-feedback">Вкажіть потрібну послугу.</div>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label fw-medium">Коментар або опис проблеми</label>
+                        <textarea class="form-control" rows="3" placeholder="Розкажіть коротко, що вас турбує..."></textarea>
+                    </div>
+
+                    <div class="col-12 mt-4">
+                        <button type="submit" class="btn btn-tesla w-100 fs-5">Підтвердити запис</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer id="location" class="footer-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5 class="footer-title">Зв'язатися з нами</h5>
+                    <div class="footer-text">
+                        <i class="bi bi-telephone"></i>
+                        <span>+380 (068) 435-78-58</span>
+                    </div>
+                    <div class="footer-text">
+                        <i class="bi bi-geo-alt"></i>
+                        <span>вул. Патона, буд.1, м. Львів, 79040</span>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <h5 class="footer-title">Графік роботи</h5>
+                    <div class="footer-text" style="font-size: 0.85rem;">Понеділок - П'ятниця: 8:00 - 18:00</div>
+                    <div class="footer-text" style="font-size: 0.85rem;">Субота: 9:00 - 16:00</div>
+                    <div class="footer-text" style="font-size: 0.85rem;">Неділя: Вихідний</div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <h5 class="footer-title">Ми у соцмережах</h5>
+                    <div>
+                        <a href="#" class="social-icon" aria-label="Instagram">
+                            <i class="bi bi-instagram"></i>
+                        </a>
+                        <a href="#" class="social-icon" aria-label="Telegram">
+                            <i class="bi bi-telegram"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                © 2026 Tesla Service Center. Всі права захищені.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Скрипти: Тема + Валідація + Скрол навбару -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Тема
+            const themeBtn = document.getElementById('theme-btn');
+            const themeIcon = document.getElementById('theme-icon');
+            const html = document.documentElement;
+
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            html.setAttribute('data-theme', savedTheme);
+            updateIcon(savedTheme);
+
+            themeBtn.addEventListener('click', () => {
+                const currentTheme = html.getAttribute('data-theme');
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                html.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateIcon(newTheme);
+            });
+
+            function updateIcon(theme) {
+                if (theme === 'dark') {
+                    themeIcon.classList.replace('bi-moon-fill', 'bi-sun-fill');
+                    html.style.setProperty('--invert-icon', '1');
+                } else {
+                    themeIcon.classList.replace('bi-sun-fill', 'bi-moon-fill');
+                    html.style.setProperty('--invert-icon', '0');
+                }
+            }
+
+            // Анімація навбару при скролі
+            window.addEventListener('scroll', function() {
+                const navbar = document.getElementById('mainNav');
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            // Валідація форми
+            const phoneInput = document.getElementById('phoneInput');
+            const form = document.getElementById('bookingForm');
+
+            if(phoneInput && form) {
+                phoneInput.addEventListener('input', function (e) {
+                    let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,2})(\d{0,3})(\d{0,2})(\d{0,2})/);
+                    if (!x[1]) {
+                        e.target.value = '+380';
+                        return;
+                    }
+                    e.target.value = '+380 ' + (x[2] ? '(' + x[2] : '') + (x[3] ? ') ' + x[3] : '') + (x[4] ? '-' + x[4] : '') + (x[5] ? '-' + x[5] : '');
+                });
+
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    let isValid = true;
+                    
+                    if (!form.checkValidity()) {
+                        e.stopPropagation();
+                        isValid = false;
+                    }
+
+                    if (phoneInput.value.length !== 19) {
+                        phoneInput.setCustomValidity("Невірний формат");
+                        isValid = false;
+                    } else {
+                        phoneInput.setCustomValidity("");
+                    }
+
+                    form.classList.add('was-validated');
+
+                    if(isValid) {
+                        const btn = form.querySelector('button[type="submit"]');
+                        const originalText = btn.innerHTML;
+                        btn.classList.replace('btn-tesla', 'btn-success');
+                        btn.innerHTML = '<i class="bi bi-check-circle"></i> Заявка прийнята!';
+                        
+                        setTimeout(() => {
+                            form.reset();
+                            form.classList.remove('was-validated');
+                            btn.classList.replace('btn-success', 'btn-tesla');
+                            btn.innerHTML = originalText;
+                        }, 3500);
+                    }
+                });
+            }
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
