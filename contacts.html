@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Контакти та FAQ | E-SERVICE Tesla</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <style>
+        :root {
+            --tesla-red: #E51937;
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --nav-bg: #ffffff;
+            --footer-bg: #f8f9fa;
+            --border-color: #eeeeee;
+            --card-bg: #ffffff;
+            --text-muted: #6c757d;
+            --icon-bg: rgba(229, 25, 55, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --text-color: #f8f9fa;
+            --nav-bg: #1a1a1a;
+            --footer-bg: #1a1a1a;
+            --border-color: #333333;
+            --card-bg: #1e1e1e;
+            --text-muted: #aaaaaa;
+            --icon-bg: rgba(229, 25, 55, 0.2);
+        }
+
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); transition: background-color 0.3s, color 0.3s; }
+        
+        /* --- НАВБАР (GLASSMORPHISM) --- */
+        .navbar { background-color: rgba(255, 255, 255, 0.75) !important; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0, 0, 0, 0.05); padding: 20px 0; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); }
+        [data-theme="dark"] .navbar { background-color: rgba(18, 18, 18, 0.75) !important; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        .navbar.scrolled { padding: 10px 0; background-color: rgba(255, 255, 255, 0.95) !important; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+        [data-theme="dark"] .navbar.scrolled { background-color: rgba(18, 18, 18, 0.95) !important; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+
+        .nav-link { position: relative; color: var(--text-color) !important; font-size: 0.95rem; margin: 0 12px; font-weight: 600; padding: 8px 0 !important; transition: color 0.3s; }
+        .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: 0; left: 0; background-color: var(--tesla-red); transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); }
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+        .nav-link:hover, .nav-link.active { color: var(--tesla-red) !important; }
+        .brand-text { font-size: 1.4rem; letter-spacing: 1px; color: var(--text-color); text-decoration: none; transition: transform 0.3s;}
+        .brand-text:hover { transform: scale(1.05); }
+
+        .theme-toggle { background: none; border: none; color: var(--text-color); font-size: 1.2rem; cursor: pointer; transition: transform 0.3s;}
+        .theme-toggle:hover { transform: rotate(15deg); color: var(--tesla-red); }
+        .lang-switcher a { text-decoration: none; color: var(--text-muted); font-weight: 600; font-size: 0.85rem; transition: color 0.2s;}
+        .lang-switcher a.active { color: var(--text-color); border-bottom: 1px solid var(--text-color);}
+        .lang-switcher a:hover { color: var(--tesla-red); }
+        .lang-divider { margin: 0 8px; color: var(--border-color); }
+
+        .btn-tesla-glow { background: linear-gradient(135deg, #E51937, #b3122a); color: white !important; border-radius: 4px; padding: 10px 24px; font-weight: 600; border: none; display: inline-block; text-decoration: none; box-shadow: 0 4px 15px rgba(229, 25, 55, 0.3); transition: all 0.3s ease; }
+        .btn-tesla-glow:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(229, 25, 55, 0.5); }
+
+        /* HEADER */
+        .page-header { background-color: #111; color: white; padding: 160px 0 100px; overflow: hidden; position: relative; }
+        .huge-bg-text { position: absolute; font-size: 14rem; font-weight: 900; color: rgba(255,255,255,0.02); top: -40px; left: 5%; z-index: 0; line-height: 1; user-select: none; letter-spacing: -3px;}
+        .header-content { position: relative; z-index: 1; }
+        .header-pre { color: var(--tesla-red); font-size: 0.85rem; letter-spacing: 2px; font-weight: 600; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center;}
+        .header-pre::before { content: ""; width: 30px; height: 2px; background-color: var(--tesla-red); margin-right: 15px; }
+
+        /* КАРТКИ КОНТАКТІВ */
+        .contact-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 40px 30px; text-align: center; height: 100%; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .contact-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); border-color: var(--tesla-red); }
+        .contact-icon { width: 60px; height: 60px; background-color: var(--icon-bg); color: var(--tesla-red); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin: 0 auto 20px; }
+        .contact-title { font-weight: 700; font-size: 1.2rem; margin-bottom: 15px; }
+        .contact-text { color: var(--text-muted); font-size: 0.95rem; margin: 0; line-height: 1.6; }
+        .contact-link { color: var(--text-color); text-decoration: none; font-weight: 600; transition: color 0.2s;}
+        .contact-link:hover { color: var(--tesla-red); }
+
+        /* МАПА */
+        .map-container { border-radius: 8px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 80px; border: 1px solid var(--border-color);}
+        
+        /* FAQ АККОРДЕОН */
+        .section-title { font-weight: 800; font-size: 2.2rem; margin-bottom: 40px; text-transform: uppercase; }
+        .accordion-item { background-color: var(--card-bg); border: 1px solid var(--border-color); margin-bottom: 15px; border-radius: 8px !important; overflow: hidden; }
+        .accordion-button { background-color: var(--card-bg); color: var(--text-color); font-weight: 600; font-size: 1.05rem; padding: 20px 25px; box-shadow: none !important; }
+        .accordion-button:not(.collapsed) { background-color: rgba(229, 25, 55, 0.05); color: var(--tesla-red); }
+        .accordion-button::after { filter: invert(var(--invert-icon, 0)); }
+        .accordion-button:not(.collapsed)::after { filter: invert(30%) sepia(85%) saturate(3000%) hue-rotate(335deg) brightness(95%) contrast(90%); } /* Робить іконку червоною */
+        .accordion-body { background-color: var(--card-bg); color: var(--text-muted); padding: 5px 25px 25px; line-height: 1.6; border-top: 1px solid var(--border-color);}
+
+        /* Footer */
+        .footer-section { background-color: var(--footer-bg); padding: 60px 0 20px; border-top: 1px solid var(--border-color); margin-top: 80px;}
+        .footer-title { font-weight: 700; margin-bottom: 20px; color: var(--text-color);}
+        .footer-text { color: var(--text-muted); margin-bottom: 10px; display: flex; align-items: flex-start; }
+        .footer-text i { color: var(--tesla-red); margin-right: 10px; margin-top: 3px; }
+        .social-icon { display: inline-flex; align-items: center; justify-content: center; width: 35px; height: 35px; background-color: var(--tesla-red); border-radius: 50%; margin-right: 10px; color: white; text-decoration: none; transition: transform 0.3s ease; }
+        .social-icon:hover { transform: translateY(-3px); background-color: #c9152f; }
+        .copyright { text-align: center; color: var(--text-muted); margin-top: 50px; font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top" id="mainNav">
+        <div class="container">
+            <a class="brand-text fw-bold" href="index.html">
+                <span>E-</span><span style="color: var(--tesla-red);">SERVICE</span>
+            </a>
+            
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon" style="filter: invert(var(--invert-icon, 0));"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto mt-3 mt-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="index.html#services">Послуги</a></li>
+                    <li class="nav-item"><a class="nav-link" href="pricing_ua.html">Ціни</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="contacts.html">Контакти</a></li>
+                </ul>
+                
+                <div class="d-flex align-items-center justify-content-center mt-4 mt-lg-0 gap-3">
+                    <button class="theme-toggle" id="theme-btn" title="Змінити тему">
+                        <i class="bi bi-moon-fill" id="theme-icon"></i>
+                    </button>
+                    
+
+                    
+                    <a href="booking.html" class="btn-tesla-glow ms-2">Записатися</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <div class="huge-bg-text d-none d-md-block">CONTACT</div>
+        <div class="container header-content">
+            <div class="header-pre">Ми завжди на зв'язку</div>
+            <h1 class="display-3 fw-bold mb-0" style="text-transform: uppercase;">КОНТАКТИ</h1>
+            <h1 class="display-3 fw-bold" style="color: var(--tesla-red); text-transform: uppercase;">ТА FAQ</h1>
+            <p class="mt-3" style="color: #888; max-width: 600px;">Маєте питання щодо ремонту або хочете записатись? Зв'яжіться з нами будь-яким зручним способом або перегляньте часті запитання.</p>
+        </div>
+    </header>
+
+    <div class="container py-5 mt-4">
+        
+        <!-- Картки контактів -->
+        <div class="row g-4 mb-5">
+            <div class="col-lg-4 col-md-6">
+                <div class="contact-card">
+                    <div class="contact-icon"><i class="bi bi-geo-alt-fill"></i></div>
+                    <h3 class="contact-title">Адреса сервісу</h3>
+                    <p class="contact-text">вул. Патона, буд.1<br>м. Львів, 79040, Україна</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="contact-card">
+                    <div class="contact-icon"><i class="bi bi-telephone-fill"></i></div>
+                    <h3 class="contact-title">Телефони</h3>
+                    <p class="contact-text">
+                        <a href="tel:+380684357858" class="contact-link">+380 (068) 435-78-58</a><br>
+                        <a href="mailto:info@e-service.lviv.ua" class="contact-link" style="font-weight: 400; font-size: 0.9rem;">info@e-service.lviv.ua</a>
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-12">
+                <div class="contact-card">
+                    <div class="contact-icon"><i class="bi bi-clock-fill"></i></div>
+                    <h3 class="contact-title">Графік роботи</h3>
+                    <p class="contact-text">Пн - Пт: 8:00 - 18:00<br>Сб: 9:00 - 16:00<br>Нд: Вихідний</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Google Карта -->
+        <div class="map-container">
+            <!-- Вбудована карта Львова (вул. Патона 1) -->
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2573.541334057856!2d23.9678822!3d49.8239062!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x473add7b587da34b%3A0xc3f5b72223bb3ba4!2z0LLRg9C70LjRhtGPIMCG0LLQsNC90LAg0J_QsNGC0L7QvdCwLCAxLCDQm9GM0LLRltCyLCDQm9GM0LLRltCy0YHRjNC60LAg0L7QsdC70LDRgdGC0YwsIDc5MDAw!5e0!3m2!1suk!2sua!4v1715000000000!5m2!1suk!2sua" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+
+        <!-- FAQ Секція -->
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <h2 class="section-title text-center">Часті запитання (FAQ)</h2>
+                
+                <div class="accordion" id="faqAccordion">
+                    
+                    <!-- Питання 1 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="true">
+                                Які саме моделі Tesla ви обслуговуєте?
+                            </button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Ми маємо досвід та необхідне обладнання (включаючи офіційний софт Tesla Toolbox) для обслуговування всього модельного ряду: <strong>Model S, Model 3, Model X та Model Y</strong> усіх років випуску та комплектацій.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Питання 2 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                Чи використовуєте ви оригінальні запчастини?
+                            </button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <strong>Так, абсолютно.</strong> Ми використовуємо лише оригінальні запчастини Tesla. Якщо деталь недоступна або клієнт бажає заощадити, ми можемо запропонувати якісні аналоги від перевірених брендів (наприклад, для елементів підвіски), але це завжди погоджується заздалегідь.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Питання 3 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                Як довго триває комп'ютерна діагностика?
+                            </button>
+                        </h2>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Стандартна комп'ютерна діагностика зі зчитуванням усіх блоків та логів автомобіля займає <strong>від 40 хвилин до 1 години</strong>. Якщо потрібен глибинний аналіз стану батареї (Health Check), процес може тривати довше.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Питання 4 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                Чи можете ви оновити сертифікати або навігацію?
+                            </button>
+                        </h2>
+                        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <strong>Так.</strong> Ми відновлюємо протерміновані сертифікати, оновлюємо програмне забезпечення автомобіля до останньої версії, завантажуємо європейські карти навігації та вмикаємо підтримку швидкісних зарядок (Retrofit CCS2).
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Питання 5 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                                Чи надаєте ви гарантію на свої послуги?
+                            </button>
+                        </h2>
+                        <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <strong>Так, звісно!</strong> Наша фірмова залізобетонна гарантія діє рівно до того моменту, поки задні колеса вашої Тесли не перетнуть лінію воріт нашого боксу. Тільки-но ви виїхали за поріг — далі вже ваші проблеми і воля святого автопілота!
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer id="location" class="footer-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5 class="footer-title">Зв'язатися з нами</h5>
+                    <div class="footer-text">
+                        <i class="bi bi-telephone"></i>
+                        <span>+380 (068) 435-78-58</span>
+                    </div>
+                    <div class="footer-text">
+                        <i class="bi bi-geo-alt"></i>
+                        <span>вул. Патона, буд.1, м. Львів, 79040</span>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <h5 class="footer-title">Графік роботи</h5>
+                    <div class="footer-text" style="font-size: 0.85rem;">Понеділок - П'ятниця: 8:00 - 18:00</div>
+                    <div class="footer-text" style="font-size: 0.85rem;">Субота: 9:00 - 16:00</div>
+                    <div class="footer-text" style="font-size: 0.85rem;">Неділя: Вихідний</div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <h5 class="footer-title">Ми у соцмережах</h5>
+                    <div>
+                        <a href="#" class="social-icon" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="social-icon" aria-label="Telegram"><i class="bi bi-telegram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                © 2026 Tesla Service Center. Всі права захищені.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Скрипти -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // ТЕМА
+            const themeBtn = document.getElementById('theme-btn');
+            const themeIcon = document.getElementById('theme-icon');
+            const html = document.documentElement;
+
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            html.setAttribute('data-theme', savedTheme);
+            updateIcon(savedTheme);
+
+            themeBtn.addEventListener('click', () => {
+                const currentTheme = html.getAttribute('data-theme');
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                html.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateIcon(newTheme);
+            });
+
+            function updateIcon(theme) {
+                if (theme === 'dark') {
+                    themeIcon.classList.replace('bi-moon-fill', 'bi-sun-fill');
+                    html.style.setProperty('--invert-icon', '1');
+                } else {
+                    themeIcon.classList.replace('bi-sun-fill', 'bi-moon-fill');
+                    html.style.setProperty('--invert-icon', '0');
+                }
+            }
+
+            // НАВБАР СКРОЛ
+            window.addEventListener('scroll', function() {
+                const navbar = document.getElementById('mainNav');
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
